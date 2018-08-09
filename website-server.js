@@ -10,17 +10,14 @@ var https  = require('https');
 var path   = require("path");
 var os     = require('os');
 var ifaces = os.networkInterfaces();
+var ExpressPeerServer = require('peer').ExpressPeerServer;
+const port = process.env.PORT || 3000;
 
-// Public Self-Signed Certificates for HTTPS connection
-var privateKey  = fs.readFileSync('./../certificates/key.pem', 'utf8');
-var certificate = fs.readFileSync('./../certificates/cert.pem', 'utf8');
-
-var credentials = {key: privateKey, cert: certificate};
 var express = require('express');
 var app = express();
 
 var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+var httpsServer = https.createServer(app);
 
 /**
  *  Show in the console the URL access for other devices in the network
@@ -57,11 +54,9 @@ Object.keys(ifaces).forEach(function (ifname) {
 });
 
 // Allow access from all the devices of the network (as long as connections are allowed by the firewall)
-var LANAccess = "0.0.0.0";
-// For http
-httpServer.listen(8080, LANAccess);
-// For https
-httpsServer.listen(8443, LANAccess);
+// var LANAccess = "0.0.0.0";
+
+httpsServer.listen(port);
 
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/index.html'));
