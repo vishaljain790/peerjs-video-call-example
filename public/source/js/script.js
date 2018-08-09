@@ -76,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // Use the handleMessage to callback when a message comes in
         conn.on('data', handleMessage);
 
+        console.log('Peer Id: ' + peer_id);
+
         // Hide peer_id field and set the incoming peer id as value
         document.getElementById("peer_id").className += " hidden";
         document.getElementById("peer_id").value = peer_id;
