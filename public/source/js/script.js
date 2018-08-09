@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
         host: location.hostname,
         port: location.port || (location.protocol === 'https:' ? 443 : 80),
         path: '/peerjs',
-        debug: 3,
         config: {
             'iceServers': [{
 
@@ -50,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 
     function ping() {
-        console.log(peer)
+
         peer.socket.send({
             type: 'ping'
         })
@@ -60,8 +59,9 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     // Once the initialization succeeds:
     // Show the ID that allows other user to connect to your session.
-    peer.on('open', function () {
-        document.getElementById("peer-id-label").innerHTML = peer.id;
+    peer.on('open', function (id) {
+        console.log('Peer id is: ', id);
+        document.getElementById("peer-id-label").innerHTML = id;
     });
 
     // When someone connects to your session:
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // Use the handleMessage to callback when a message comes in
         conn.on('data', handleMessage);
 
-        console.log('Peer Id: ' + peer_id);
+        console.log('connected peer Id: ' + peer_id);
 
         // Hide peer_id field and set the incoming peer id as value
         document.getElementById("peer_id").className += " hidden";
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     peer.on('error', function (err) {
         // alert("An error ocurred with peer: " + err);
-         console.error(err);
+        console.error(err);
     });
 
     /**
@@ -95,27 +95,35 @@ document.addEventListener("DOMContentLoaded", function (event) {
     peer.on('call', function (call) {
         var acceptsCall = confirm("Videocall incoming, do you want to accept it ?");
 
-        if (acceptsCall) {
-            // Answer the call with your own video/audio stream
-            call.answer(window.localStream);
+        // if (acceptsCall) {
+        //     // Answer the call with your own video/audio stream
 
-            // Receive data
-            call.on('stream', function (stream) {
-                // Store a global reference of the other user stream
-                window.peer_stream = stream;
-                // Display the stream of the other user in the peer-camera video element !
-                onReceiveStream(stream, 'peer-camera');
-            });
+        console.log("Streaming: " + window.localStream);
+        call.answer(window.localStream);
 
-            // Handle when the call finishes
-            call.on('close', function () {
-                alert("The videocall has finished");
-            });
+        // Receive data
+        call.on('stream', function (stream) {
+            // Store a global reference of the other user stream
 
-            // use call.close() to finish a call
-        } else {
-            console.log("Call denied !");
-        }
+            console.log('Receiving data..' + stream);
+            //window.peer_stream = stream;
+            // Display the stream of the other user in the peer-camera video element !
+            //onReceiveStream(stream, 'peer-camera');
+
+            var video1 = document.getElementById('peer-camera');
+            // Set the given stream as the video source
+            video1.src = URL.createObjectURL(window.localStream);
+        });
+
+        // // Handle when the call finishes
+        // call.on('close', function () {
+        //     alert("The videocall has finished");
+        // });
+
+        // use call.close() to finish a call
+        // } else {
+        //     console.log("Call denied !");
+        // }
     });
 
     /**
@@ -144,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
         // Retrieve the video element according to the desired
         var video = document.getElementById(element_id);
         // Set the given stream as the video source
-        video.src = window.URL.createObjectURL(stream);
+        video.src = URL.createObjectURL(stream);
 
         // Store a global reference of the stream
         window.peer_stream = stream;
@@ -198,14 +206,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
      */
     document.getElementById("call").addEventListener("click", function () {
         console.log('Calling to ' + peer_id);
-        console.log(peer);
+        // console.log(peer);
 
         var call = peer.call(peer_id, window.localStream);
 
         call.on('stream', function (stream) {
+            console.log('Streming for callee: ');
             window.peer_stream = stream;
-
-            onReceiveStream(stream, 'peer-camera');
+            var video = document.getElementById('peer-camera');
+            // Set the given stream as the video source
+            video.src = URL.createObjectURL(stream);
+            //onReceiveStream(stream, 'peer-camera');
         });
     }, false);
 

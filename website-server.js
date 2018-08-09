@@ -9,7 +9,7 @@ var options = {
 }
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3100;
 
 // create a http server instance to listen to request
 var server = require('http').createServer(app);
