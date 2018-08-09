@@ -85,8 +85,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
 
     peer.on('error', function (err) {
-        alert("An error ocurred with peer: " + err);
-        console.error(err);
+        // alert("An error ocurred with peer: " + err);
+         console.error(err);
     });
 
     /**
