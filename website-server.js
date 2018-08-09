@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 // create a http server instance to listen to request
 var server = require('http').createServer(app);
-app.use('/resources', express.static('./source'));
+app.use(express.static('public/'));
 // peerjs is the path that the peerjs server will be connected to.
 app.use('/peerjs', ExpressPeerServer(server, options));
 // Now listen to your ip and port.
