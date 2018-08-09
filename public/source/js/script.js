@@ -49,14 +49,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     });
 
 
-    // function ping() {
-    //     console.log(peer)
-    //     peer.socket.send({
-    //         type: 'ping'
-    //     })
-    //     setTimeout(ping, 16000)
-    // }
-    // ping();
+    function ping() {
+        console.log(peer)
+        peer.socket.send({
+            type: 'ping'
+        })
+        setTimeout(ping, 16000)
+    }
+    ping();
 
     // Once the initialization succeeds:
     // Show the ID that allows other user to connect to your session.
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
             // Receive data
             call.on('stream', function (stream) {
                 // Store a global reference of the other user stream
-               // window.peer_stream = stream;
+                window.peer_stream = stream;
                 // Display the stream of the other user in the peer-camera video element !
                 onReceiveStream(stream, 'peer-camera');
             });
