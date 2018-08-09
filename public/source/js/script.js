@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 // Store a global reference of the other user stream
                 window.peer_stream = stream;
                 // Display the stream of the other user in the peer-camera video element !
-                onReceiveStream(stream, 'peer-camera');
+                //onReceiveStream(stream, 'peer-camera');
             });
 
             // Handle when the call finishes
