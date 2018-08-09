@@ -19,7 +19,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
         debug: 3,
         config: {
             'iceServers': [{
-                    url: 'stun:stun1.l.google.com:19302'
+                    url: 'stun:stun.l.google.com:19302'
+                },
+                {
+                    url: 'turn:homeo@turn.bistri.com:80',
+                    credential: 'homeo'
                 }
             ]
         }
